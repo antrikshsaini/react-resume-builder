@@ -36,7 +36,6 @@ import {
 export const loginCheck = (user, callback) => {
   return (dispatch) => {
     dispatch(logInRequest());
-
     axios({
       url: `${config.REACT_APP_API_URL}/api/auth/login/`,
       method: "POST",
@@ -137,7 +136,6 @@ export const fetchData = (token, callback) => {
 
   return (dispatch) => {
     dispatch(fetchDataRequest());
-
     axios
       .get(`${config.REACT_APP_API_URL}/api/resume/${user.id}`, {
         headers: {
@@ -176,35 +174,86 @@ export const fetchDataFailure = (error) => {
   };
 };
 
+// const transformResumeData = (resume) => {
+//   return {
+//     title: resume.title,
+//     template: resume.template,
+//     personal: {
+//       name: `${resume.personal.firstName} ${resume.personal.lastName}`,
+//       email: resume.personal.email,
+//       phone: resume.personal.phone,
+//       website: resume.personal.website,
+//     },
+//     education: resume.education.map((edu) => ({
+//       institution: edu.university,
+//       degree: edu.degree,
+//       graduation_date: edu.endDate, // Assuming graduation_date maps to endDate
+//     })),
+//     experience: resume.experience.map((exp) => ({
+//       company: exp.organisation,
+//       position: exp.title,
+//       start_date: exp.startDate,
+//       end_date: exp.endDate,
+//     })),
+//     skills: resume.skills.map((skill) => skill.skillName),
+//     projects: resume.projects.map((project) => ({
+//       name: project.projectName,
+//       description: project.projectDescription.join(" "), // Join description array
+//     })),
+//     achivements: resume.achivements.map((ach) => ({
+//       title: ach.title,
+//       date: ach.date,
+//     })),
+//   };
+// };
+
+// export const postData = (token, resume) => {
+//   const transformedData = transformResumeData(resume);
+//   console.log("Transformed Data Sent to Backend:", transformedData);
+//   return (dispatch) => {
+//     dispatch(postDataRequest());
+
+//     axios({
+//       url: `${config.REACT_APP_API_URL}/api/resume/`,
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       data: transformedData,
+//     })
+//       .then((response) => {
+//         console.log("Response from backend:", response.data);
+//         dispatch(postDataSuccess(response.data));
+//       })
+//       .catch((error) => {
+//         console.error("Error response:", error.response);
+//         dispatch(postDataFailure(error.message));
+//       });
+//   };
+// };
+
 export const postData = (token, resume) => {
-  //console.log(token);
-
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace("-", "+").replace("_", "/");
-  const user = JSON.parse(window.atob(base64));
-
-  const bodyData = {
-    data: resume,
-    user: user,
-  };
-
   return (dispatch) => {
     dispatch(postDataRequest());
+
+    console.log("Data being sent to backend:", resume);
 
     axios({
       url: `${config.REACT_APP_API_URL}/api/resume/`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": token,
+        Authorization: `Bearer ${token}`,
       },
-      data: JSON.stringify(bodyData),
+      data: resume,
     })
       .then((response) => {
-        const data = response.data;
-        dispatch(postDataSuccess(data.data));
+        console.log("Response from backend:", response.data);
+        dispatch(postDataSuccess(response.data));
       })
       .catch((error) => {
+        console.error("Error response:", error.response);
         dispatch(postDataFailure(error.message));
       });
   };
