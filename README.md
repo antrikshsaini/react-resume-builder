@@ -25,3 +25,15 @@ Install Docker Desktop to run container
 `docker tag react-resume-builder-frontend antrikshsaini/react-resume-builder-frontend:latest`
 
 `docker push antrikshsaini/react-resume-builder-frontend:latest`
+
+testing email
+johnlam@gmail.com
+johnlam123
+
+### to remove latest created image
+
+docker-compose down
+
+### to delete all images from system
+
+docker system prune

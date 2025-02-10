@@ -133,14 +133,14 @@ export const fetchData = (token, callback) => {
   } else {
     user = {};
   }
-
+  console.log("user:", user);
   return (dispatch) => {
     dispatch(fetchDataRequest());
     axios
-      .get(`${config.REACT_APP_API_URL}/api/resume/${user.id}`, {
+      .get(`${config.REACT_APP_API_URL}/api/resume/all/`, {
         headers: {
           "Content-Type": "application/json",
-          "auth-token": token,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
