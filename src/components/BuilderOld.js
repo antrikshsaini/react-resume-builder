@@ -21,12 +21,7 @@ import HiddenResume from "./templates/HiddenResume";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { jsPDF } from "jspdf";
-import {
-  fetchData,
-  postData,
-  updateData,
-  //   renderPreview,
-} from "../redux/actionCreators";
+import { fetchData, postData, updateData } from "../redux/actionCreators";
 
 const useStyles = makeStyles((theme) => ({
   hidden: {
@@ -204,27 +199,12 @@ const Builder = (props) => {
   };
 
   const clickSave = (event) => {
-    console.log("***********I M here in Save*************");
     if (event) event.preventDefault();
 
-    if (token) {
-      if (props.resume._id) {
-        console.log("***********I M here in Update*************");
-        props.updateData(token, props.resume);
-        console.log(props);
-      } else {
-        console.log("***********I M here in Post*************");
-        if (props.resume) {
-          //Check props.resume is defined or not
-          if (props.resume.template === "" || props.resume.title === "") {
-            alert("Please choose a template and write unique title");
-          } else {
-            props.postData(token, props.resume);
-          }
-        } else {
-          console.error("props.resume is undefined");
-        }
-      }
+    if (props.resume._id) {
+      props.updateData(token, props.resume);
+    } else if (token) {
+      props.postData(token, props.resume);
     } else {
       history.push("/signup");
     }
@@ -327,11 +307,11 @@ const Builder = (props) => {
           )}
         </div>
       </div>
-      {/* {props.resume.template ? (
+      {props.resume.template ? (
         <HiddenResume id={"pdf"} className={classes.hidden} />
       ) : (
         <div id={"pdf"}></div>
-      )} */}
+      )}
     </React.Fragment>
   );
 };

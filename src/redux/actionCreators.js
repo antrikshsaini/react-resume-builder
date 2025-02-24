@@ -174,65 +174,6 @@ export const fetchDataFailure = (error) => {
   };
 };
 
-// const transformResumeData = (resume) => {
-//   return {
-//     title: resume.title,
-//     template: resume.template,
-//     personal: {
-//       name: `${resume.personal.firstName} ${resume.personal.lastName}`,
-//       email: resume.personal.email,
-//       phone: resume.personal.phone,
-//       website: resume.personal.website,
-//     },
-//     education: resume.education.map((edu) => ({
-//       institution: edu.university,
-//       degree: edu.degree,
-//       graduation_date: edu.endDate, // Assuming graduation_date maps to endDate
-//     })),
-//     experience: resume.experience.map((exp) => ({
-//       company: exp.organisation,
-//       position: exp.title,
-//       start_date: exp.startDate,
-//       end_date: exp.endDate,
-//     })),
-//     skills: resume.skills.map((skill) => skill.skillName),
-//     projects: resume.projects.map((project) => ({
-//       name: project.projectName,
-//       description: project.projectDescription.join(" "), // Join description array
-//     })),
-//     achivements: resume.achivements.map((ach) => ({
-//       title: ach.title,
-//       date: ach.date,
-//     })),
-//   };
-// };
-
-// export const postData = (token, resume) => {
-//   const transformedData = transformResumeData(resume);
-//   console.log("Transformed Data Sent to Backend:", transformedData);
-//   return (dispatch) => {
-//     dispatch(postDataRequest());
-
-//     axios({
-//       url: `${config.REACT_APP_API_URL}/api/resume/`,
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//       data: transformedData,
-//     })
-//       .then((response) => {
-//         console.log("Response from backend:", response.data);
-//         dispatch(postDataSuccess(response.data));
-//       })
-//       .catch((error) => {
-//         console.error("Error response:", error.response);
-//         dispatch(postDataFailure(error.message));
-//       });
-//   };
-// };
-
 export const postData = (token, resume) => {
   return (dispatch) => {
     dispatch(postDataRequest());
@@ -251,10 +192,33 @@ export const postData = (token, resume) => {
       .then((response) => {
         console.log("Response from backend:", response.data);
         dispatch(postDataSuccess(response.data));
+        alert("Resume saved successfully");
       })
       .catch((error) => {
         console.error("Error response:", error.response);
-        dispatch(postDataFailure(error.message));
+        if (error.response && error.response.status === 500) {
+          // General 500 error
+          dispatch(
+            postDataFailure(
+              "Server Error. A resume with same title may already exists. Try again by choosing a unique title."
+            )
+          );
+          alert(
+            "Server Error. A resume with same title may already exists. Try again by choosing a unique title."
+          );
+        } else if (error.response) {
+          // Other HTTP errors (e.g., 400, 404)
+          dispatch(
+            postDataFailure(error.response.data.message || "An error occurred.")
+          );
+        } else {
+          // Network errors or other unexpected errors
+          dispatch(
+            postDataFailure(
+              error.message || "Network error. Please check your connection."
+            )
+          );
+        }
       });
   };
 };

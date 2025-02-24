@@ -35,8 +35,8 @@ const initialState = {
   token: null,
   image: "",
   data: {
-    title: "Resume_1",
-    template: "Template_1",
+    title: "",
+    template: "",
     personal: {
       firstName: "",
       lastName: "",
