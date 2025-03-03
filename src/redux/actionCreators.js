@@ -125,15 +125,15 @@ export const setDataBlank = (index) => {
 };
 
 export const fetchData = (token, callback) => {
-  var user;
-  if (token) {
-    var base64Url = token.split(".")[1];
-    var base64 = base64Url.replace("-", "+").replace("_", "/");
-    user = JSON.parse(window.atob(base64));
-  } else {
-    user = {};
-  }
-  console.log("user:", user);
+  // var user;
+  // if (token) {
+  //   var base64Url = token.split(".")[1];
+  //   var base64 = base64Url.replace("-", "+").replace("_", "/");
+  //   user = JSON.parse(window.atob(base64));
+  // } else {
+  //   user = {};
+  // }
+  // console.log("user:", user);
   return (dispatch) => {
     dispatch(fetchDataRequest());
     axios
@@ -145,7 +145,8 @@ export const fetchData = (token, callback) => {
       })
       .then((response) => {
         const data = response.data;
-        dispatch(fetchDataSuccess(data.data));
+        console.log("data:", data);
+        dispatch(fetchDataSuccess(data));
         callback();
       })
       .catch((error) => {
