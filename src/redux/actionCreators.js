@@ -1,6 +1,5 @@
 import axios from "axios";
 import html2canvas from "html2canvas";
-//import { jsPDF } from "jspdf";
 import { config } from "../config/config.js";
 
 import {
@@ -139,7 +138,6 @@ export const fetchData = (token, callback) => {
       })
       .then((response) => {
         const data = response.data;
-        console.log("data:", data);
         dispatch(fetchDataSuccess(data));
         callback();
       })
@@ -171,7 +169,6 @@ export const fetchDataFailure = (error) => {
 
 export const fetchUserData = (token, callback) => {
   return (dispatch) => {
-    console.log("I m Here *********************************");
     dispatch(fetchUserDataRequest());
     axios
       .get(`${config.REACT_APP_API_URL}/api/auth/user/`, {
@@ -182,7 +179,6 @@ export const fetchUserData = (token, callback) => {
       })
       .then((response) => {
         const data = response.data;
-        console.log("At action Creator data:", data);
         dispatch(fetchUserDataSuccess(data));
         callback();
       })
@@ -228,7 +224,6 @@ export const postData = (token, resume) => {
       data: resume,
     })
       .then((response) => {
-        console.log("Response from backend:", response.data);
         dispatch(postDataSuccess(response.data));
         alert("Resume saved successfully");
       })
@@ -290,7 +285,6 @@ export const updateData = (token, resume) => {
     data: resume,
     user: user,
   };
-  //console.log(token);
 
   return (dispatch) => {
     dispatch(updateDataRequest());
@@ -306,7 +300,6 @@ export const updateData = (token, resume) => {
     })
       .then((response) => {
         const data = response.data;
-        //console.log(data.data);
         dispatch(updateDataSuccess(data.data));
       })
       .catch((error) => {
@@ -354,7 +347,6 @@ export const renderPreviewSuccess = (image) => {
 export const updateUser = (newUser, token) => {
   return (dispatch) => {
     dispatch(updateUserRequest());
-    //console.log(token);
     console.log("Data being sent to backend to update:", newUser);
     axios({
       url: `${config.REACT_APP_API_URL}/api/auth/user/`,
@@ -366,10 +358,8 @@ export const updateUser = (newUser, token) => {
       data: newUser,
     })
       .then((response) => {
-        console.log("Response from backend:", response.data);
         dispatch(updateUserSuccess(response.data));
         alert("User Update saved successfully");
-        // dispatch(updateUserSuccess());
       })
       .catch((error) => {
         console.error("Error response:", error.response);
@@ -422,10 +412,6 @@ export const updateUserFailure = (error) => {
 };
 
 export const deleteData = (token, resume) => {
-  // var base64Url = token.split(".")[1];
-  // var base64 = base64Url.replace("-", "+").replace("_", "/");
-  // const user = JSON.parse(window.atob(base64));
-
   return (dispatch) => {
     dispatch(deleteDataRequest());
 
@@ -436,11 +422,8 @@ export const deleteData = (token, resume) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      // data: JSON.stringify({ user: user }),
     })
       .then((response) => {
-        //const data = response.data
-        //console.log(data.data);
         dispatch(deleteDataSuccess());
         alert("Deleted successfully");
       })

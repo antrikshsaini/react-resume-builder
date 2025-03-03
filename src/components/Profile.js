@@ -39,11 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = (props) => {
   const classes = useStyles();
-  //   const token = localStorage.getItem("token");
-  //   var base64Url = token.split(".")[1];
-  //   var base64 = base64Url.replace("-", "+").replace("_", "/");
-  //   const user = JSON.parse(window.atob(base64));
-  //console.log(user)
 
   const [values, setValues] = useState({
     first_name: "",
@@ -80,7 +75,6 @@ const Dashboard = (props) => {
       last_name: values.last_name || undefined,
       email: values.email || undefined,
     };
-    //console.log(user, props.token)
     props.updateUser(userData, props.token);
   };
 

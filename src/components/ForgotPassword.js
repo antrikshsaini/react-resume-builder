@@ -48,8 +48,6 @@ export default function ForgotPassword() {
   };
 
   const goto = (res) => {
-    //console.log("result:",res);
-
     if (res.status === 200) {
       alert.success("Please check your mail for password reset link");
       alert.info("Redirecting you to login page");

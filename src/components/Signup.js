@@ -111,7 +111,6 @@ export default function Signup() {
         alert("Database Error, User already exist");
       }
       let res = await response.json();
-      //console.log(res)
       goto(response, res.user);
       return response;
     } catch (err) {

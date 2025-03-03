@@ -54,12 +54,8 @@ const Template = (props) => {
   const handleClick = (template) => {
     props.resume.template = template;
     props.resume.data.template = template;
-    // alert(`Template Updated to : ${template}`);
-    console.log("Resume props ", props.resume);
-    console.log(`******** GOing to Template selected : ${template}`);
+
     history.push(`/${template}`);
-    // const update = "update";
-    // history.push(`/${template}`, update)
   };
 
   return (

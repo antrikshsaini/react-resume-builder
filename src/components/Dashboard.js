@@ -51,7 +51,6 @@ const Dashboard = (props) => {
   const [content, setContent] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     setContent(newValue);
   };
 

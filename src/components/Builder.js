@@ -204,16 +204,12 @@ const Builder = (props) => {
   };
 
   const clickSave = (event) => {
-    console.log("***********I M here in Save*************");
     if (event) event.preventDefault();
 
     if (token) {
       if (props.resume._id) {
-        console.log("***********I M here in Update*************");
         props.updateData(token, props.resume);
-        console.log(props);
       } else {
-        console.log("***********I M here in Post*************");
         if (props.resume) {
           //Check props.resume is defined or not
           if (props.resume.template === "" || props.resume.title === "") {

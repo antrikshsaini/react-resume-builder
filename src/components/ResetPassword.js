@@ -66,8 +66,6 @@ export default function ResetPassword() {
   };
 
   const goto = (res) => {
-    //console.log("result:",res);
-
     if (res.status === 200) {
       alert.success("Password reset successfull");
       alert.info("Redirecting you to login page");
