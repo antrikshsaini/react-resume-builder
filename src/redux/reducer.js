@@ -4,6 +4,9 @@ import {
   FETCH_DATA_REQUEST,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILED,
+  FETCH_USER_DATA_REQUEST,
+  FETCH_USER_DATA_SUCCESS,
+  FETCH_USER_DATA_FAILED,
   POST_DATA_REQUEST,
   POST_DATA_SUCCESS,
   POST_DATA_FAILED,
@@ -34,6 +37,7 @@ const initialState = {
   error: "",
   token: null,
   image: "",
+  userData: { id: "", first_name: "", last_name: "", email: "" },
   data: {
     title: "",
     template: "",
@@ -158,6 +162,26 @@ const reducer = (state = initialState, action) => {
       return {
         ...newState,
         data: blankResume,
+        loading: false,
+        error: action.payload,
+      };
+    case FETCH_USER_DATA_REQUEST:
+      return {
+        ...newState,
+        loading: true,
+        error: "",
+      };
+    case FETCH_USER_DATA_SUCCESS:
+      return {
+        ...newState,
+        loading: false,
+        userData: action.payload,
+        error: "",
+      };
+    case FETCH_USER_DATA_FAILED:
+      return {
+        ...newState,
+        userData: null,
         loading: false,
         error: action.payload,
       };

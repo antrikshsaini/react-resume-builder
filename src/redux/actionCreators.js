@@ -9,6 +9,9 @@ import {
   FETCH_DATA_REQUEST,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILED,
+  FETCH_USER_DATA_REQUEST,
+  FETCH_USER_DATA_SUCCESS,
+  FETCH_USER_DATA_FAILED,
   POST_DATA_REQUEST,
   POST_DATA_SUCCESS,
   POST_DATA_FAILED,
@@ -125,15 +128,6 @@ export const setDataBlank = (index) => {
 };
 
 export const fetchData = (token, callback) => {
-  // var user;
-  // if (token) {
-  //   var base64Url = token.split(".")[1];
-  //   var base64 = base64Url.replace("-", "+").replace("_", "/");
-  //   user = JSON.parse(window.atob(base64));
-  // } else {
-  //   user = {};
-  // }
-  // console.log("user:", user);
   return (dispatch) => {
     dispatch(fetchDataRequest());
     axios
@@ -171,6 +165,49 @@ export const fetchDataSuccess = (data) => {
 export const fetchDataFailure = (error) => {
   return {
     type: FETCH_DATA_FAILED,
+    payload: error,
+  };
+};
+
+export const fetchUserData = (token, callback) => {
+  return (dispatch) => {
+    console.log("I m Here *********************************");
+    dispatch(fetchUserDataRequest());
+    axios
+      .get(`${config.REACT_APP_API_URL}/api/auth/user/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log("At action Creator data:", data);
+        dispatch(fetchUserDataSuccess(data));
+        callback();
+      })
+      .catch((error) => {
+        dispatch(fetchUserDataFailure(error.message));
+      });
+  };
+};
+
+export const fetchUserDataRequest = () => {
+  return {
+    type: FETCH_USER_DATA_REQUEST,
+  };
+};
+
+export const fetchUserDataSuccess = (data) => {
+  return {
+    type: FETCH_USER_DATA_SUCCESS,
+    payload: data,
+  };
+};
+
+export const fetchUserDataFailure = (error) => {
+  return {
+    type: FETCH_USER_DATA_FAILED,
     payload: error,
   };
 };
