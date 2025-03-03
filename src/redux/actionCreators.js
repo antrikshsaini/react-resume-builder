@@ -352,39 +352,52 @@ export const renderPreviewSuccess = (image) => {
 };
 
 export const updateUser = (newUser, token) => {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace("-", "+").replace("_", "/");
-  var user = JSON.parse(window.atob(base64));
-
-  user = {
-    ...user,
-    firstName: newUser.firstName,
-    lastName: newUser.lastName,
-    email: newUser.email,
-  };
-  //console.log(user);
-
   return (dispatch) => {
     dispatch(updateUserRequest());
     //console.log(token);
-
+    console.log("Data being sent to backend to update:", newUser);
     axios({
-      url: `${config.REACT_APP_API_URL}/api/user/${user.id}/`,
+      url: `${config.REACT_APP_API_URL}/api/auth/user/`,
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": token,
+        Authorization: `Bearer ${token}`,
       },
-      data: JSON.stringify(user),
+      data: newUser,
     })
       .then((response) => {
-        //const data = response.data
-        //console.log(data.data);
-        dispatch(updateUserSuccess());
+        console.log("Response from backend:", response.data);
+        dispatch(updateUserSuccess(response.data));
+        alert("User Update saved successfully");
+        // dispatch(updateUserSuccess());
       })
       .catch((error) => {
-        console.log(error);
-        dispatch(updateUserFailure(error));
+        console.error("Error response:", error.response);
+        if (error.response && error.response.status === 500) {
+          // General 500 error
+          dispatch(
+            updateUserFailure(
+              "Server Error. Same Email may already exists. Try again by choosing a unique email."
+            )
+          );
+          alert(
+            "Server Error. Same Email may already exists. Try again by choosing a unique email."
+          );
+        } else if (error.response) {
+          // Other HTTP errors (e.g., 400, 404)
+          dispatch(
+            updateUserFailure(
+              error.response.data.message || "An error occurred."
+            )
+          );
+        } else {
+          // Network errors or other unexpected errors
+          dispatch(
+            updateUserFailure(
+              error.message || "Network error. Please check your connection."
+            )
+          );
+        }
       });
   };
 };
@@ -409,26 +422,27 @@ export const updateUserFailure = (error) => {
 };
 
 export const deleteData = (token, resume) => {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace("-", "+").replace("_", "/");
-  const user = JSON.parse(window.atob(base64));
+  // var base64Url = token.split(".")[1];
+  // var base64 = base64Url.replace("-", "+").replace("_", "/");
+  // const user = JSON.parse(window.atob(base64));
 
   return (dispatch) => {
     dispatch(deleteDataRequest());
 
     axios({
-      url: `${config.REACT_APP_API_URL}/api/resume/${resume._id}/`,
+      url: `${config.REACT_APP_API_URL}/api/resume/${resume.id}/`,
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": token,
+        Authorization: `Bearer ${token}`,
       },
-      data: JSON.stringify({ user: user }),
+      // data: JSON.stringify({ user: user }),
     })
       .then((response) => {
         //const data = response.data
         //console.log(data.data);
         dispatch(deleteDataSuccess());
+        alert("Deleted successfully");
       })
       .catch((error) => {
         dispatch(deleteDataFailure(error.message));
