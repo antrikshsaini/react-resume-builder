@@ -22,7 +22,7 @@ This frontend application is designed to work in conjunction with a robust backe
 
 * Node.js and npm (or yarn) installed.
 * Docker Desktop (for containerized deployment).
-* * **Backend Server Running:** The backend server must be running for full functionality.
+* **Backend Server Running:** The backend server must be running for full functionality.
 
 
 ### Local Development
